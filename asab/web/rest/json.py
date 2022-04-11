@@ -46,6 +46,22 @@ class JSONDumper(object):
 			return "{}".format(o)
 
 
+HTTP_STATUS_BY_RESULT = {
+	"OK": 200,
+	"SUCCESS": 200,
+	"FAILED": 400,
+	"ERROR": 400,
+	"NOT-AUTHORIZED": 401,
+	"UNAUTHORIZED": 401,
+	"NOT-AUTHENTICATED": 401,
+	"UNAUTHENTICATED": 401,
+	"FORBIDDEN": 403,
+	"CONFLICT": 409,
+	"ALREADY-EXISTS": 409,
+	"ALREADY-IN-USE": 409,
+}
+
+
 def json_response(request, data, pretty=None, dumps=JSONDumper, **kwargs):
 	'''
 	argument `dumps` allows to specify custom JSON dumper for a serialization.
@@ -56,6 +72,11 @@ def json_response(request, data, pretty=None, dumps=JSONDumper, **kwargs):
 	'''
 	assert issubclass(dumps, JSONDumper)
 	pretty = request.query.get('pretty', 'no').lower() in frozenset(['true', '1', 't', 'y', 'yes', '']) or pretty
+
+	# Set HTTP status code based on the value of "result" field (if present)
+	# Unknown result values are considered errors and produce a generic code 400.
+	if "status" not in kwargs and "result" in data:
+		kwargs["status"] = HTTP_STATUS_BY_RESULT.get(data["result"], 400)
 
 	return aiohttp.web.json_response(
 		data,
