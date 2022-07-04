@@ -5,7 +5,7 @@ import urllib.parse
 import yaml
 
 from .abc import LibraryProviderABC
-from ..zookeeper import ZooKeeperContainer
+from ...zookeeper import ZooKeeperContainer
 
 #
 
