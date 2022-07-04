@@ -63,8 +63,10 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 		if self.Zookeeper is None:
 			L.warning("Zookeeper Client has not been established (yet). Cannot read {}".format(path))
 			return
+		L.warning("PATH {}".format(path))
 		node_path = "{}/{}".format(self.BasePath, path)
 		node_data = await self.Zookeeper.get_data(node_path)
+		L.warning("NODE DATA {}".format(node_data))
 
 		return node_data.decode('utf-8')
 
