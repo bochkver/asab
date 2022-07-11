@@ -164,7 +164,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 
 
 	async def read(self, path):
-		L.warning("DEBUG IN READ", path)
+		L.warning("DEBUG IN READ {}".format(path))
 		if self.Zookeeper is None:
 			L.warning("Zookeeper Client has not been established (yet). Cannot read {}".format(path))
 			return None
