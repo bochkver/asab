@@ -111,9 +111,11 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 
 		if url_pieces.netloc in ["", "."]:
 			# if netloc is not provided `zk:///path`, then use `zookeeper` section from config
+			L.warning("!!!!!config_section_name zookeeper")
 			config_section_name = 'zookeeper'
 			z_url = None
 		else:
+			L.warning("!!!!!config_section_name NOne")
 			config_section_name = ''
 			z_url = path
 
