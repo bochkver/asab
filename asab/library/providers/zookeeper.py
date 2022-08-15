@@ -158,7 +158,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 		if zkcontainer == self.ZookeeperContainer:
 			self.Zookeeper = self.ZookeeperContainer.ZooKeeper
 			self.VersionNodePath = self.build_path('/.version.yaml')
-			L.info("ZooKeeper library provider {} is connected.", struct_data={'path': self.FullPathPath})
+			L.info("ZooKeeper library provider {} is connected.", struct_data={'path': self.FullPath})
 
 			def on_version_changed(version, event):
 				self.App.Loop.call_soon_threadsafe(self._check_version_counter, version)
