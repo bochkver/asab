@@ -137,7 +137,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 			self.BasePath = '/' + self.Zookeeper.Path + self.BasePath
 
 		self.Version = None  # Will be read when a library become ready
-
+		L.warning("!!!!!!BasePath {}".format(self.BasePath))
 		self.App.PubSub.subscribe("ZooKeeperContainer.started!", self._on_zk_ready)
 		self.App.PubSub.subscribe("Application.tick/60!", self._get_version_counter)
 
