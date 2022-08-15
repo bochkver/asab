@@ -99,7 +99,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 		super().__init__(library)
 
 		url_pieces = urllib.parse.urlparse(path)
-
+		L.warning("!!!!!url_pieces {}".format(url_pieces))
 		self.Path = path
 		self.BasePath = url_pieces.path.lstrip("/")
 		while self.BasePath.endswith("/"):
