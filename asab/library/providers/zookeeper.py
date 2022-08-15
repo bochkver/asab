@@ -99,9 +99,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 		super().__init__(library)
 
 		url_pieces = urllib.parse.urlparse(path)
-		L.warning("!!!!!url_pieces {}".format(url_pieces))
 		self.FullPath = url_pieces.scheme + '://'
-		self.Path = path
 		self.BasePath = url_pieces.path.lstrip("/")
 		while self.BasePath.endswith("/"):
 			self.BasePath = self.BasePath[:-1]
@@ -112,11 +110,9 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 
 		if url_pieces.netloc in ["", "."]:
 			# if netloc is not provided `zk:///path`, then use `zookeeper` section from config
-			L.warning("!!!!!config_section_name zookeeper")
 			config_section_name = 'zookeeper'
 			z_url = None
 		else:
-			L.warning("!!!!!config_section_name NOne")
 			config_section_name = ''
 			z_url = path
 
@@ -143,7 +139,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 
 		self.Version = None  # Will be read when a library become ready
 		self.FullPath += self.BasePath
-		L.warning("!!!!!!self.FullPath {}".format(self.FullPath))
+
 		self.App.PubSub.subscribe("ZooKeeperContainer.started!", self._on_zk_ready)
 		self.App.PubSub.subscribe("Application.tick/60!", self._get_version_counter)
 
@@ -162,7 +158,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 		if zkcontainer == self.ZookeeperContainer:
 			self.Zookeeper = self.ZookeeperContainer.ZooKeeper
 			self.VersionNodePath = self.build_path('/.version.yaml')
-			L.info("ZooKeeper library provider {} is connected.".format(self.Path))
+			L.info("ZooKeeper library provider {} is connected.", struct_data={'path': self.FullPathPath})
 
 			def on_version_changed(version, event):
 				self.App.Loop.call_soon_threadsafe(self._check_version_counter, version)
