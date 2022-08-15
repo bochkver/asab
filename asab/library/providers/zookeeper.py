@@ -125,6 +125,8 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 			z_path=z_url
 		)
 		self.Zookeeper = self.ZookeeperContainer.ZooKeeper
+		self.Print = self.ZookeeperContainer.Config
+		L.warning("!!!!!!PRINT {}".format(self.Print))
 
 		# Handle `zk://` configuration
 		if z_url is None and url_pieces.netloc == "" and url_pieces.path == "" and self.Zookeeper.Path != '':
