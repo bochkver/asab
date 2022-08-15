@@ -100,6 +100,7 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 
 		url_pieces = urllib.parse.urlparse(path)
 		L.warning("!!!!!url_pieces {}".format(url_pieces))
+		self.FullPath = url_pieces.scheme
 		self.Path = path
 		self.BasePath = url_pieces.path.lstrip("/")
 		while self.BasePath.endswith("/"):
@@ -127,8 +128,10 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 			z_path=z_url
 		)
 		self.Zookeeper = self.ZookeeperContainer.ZooKeeper
-		self.Print = self.ZookeeperContainer.Config
-		L.warning("!!!!!!PRINT {}".format(self.Print))
+		if config_section_name == 'zookeeper':
+			self.FullPath += self.ZookeeperContainer.Config['servers']
+		else:
+			self.FullPath += url_pieces.netloc
 
 		# Handle `zk://` configuration
 		if z_url is None and url_pieces.netloc == "" and url_pieces.path == "" and self.Zookeeper.Path != '':
@@ -139,7 +142,8 @@ class ZooKeeperLibraryProvider(LibraryProviderABC):
 			self.BasePath = '/' + self.Zookeeper.Path + self.BasePath
 
 		self.Version = None  # Will be read when a library become ready
-		L.warning("!!!!!!BasePath {}".format(self.BasePath))
+		self.FullPath += self.BasePath
+		L.warning("!!!!!!self.FullPath {}".format(self.FullPath))
 		self.App.PubSub.subscribe("ZooKeeperContainer.started!", self._on_zk_ready)
 		self.App.PubSub.subscribe("Application.tick/60!", self._get_version_counter)
 
